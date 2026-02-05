@@ -1,4 +1,4 @@
 {% if nrinfragent_logging is defined and nrinfragent_logging %}
 logs:
-{{ nrinfragent_logging | to_nice_yaml(indent=2) }}
+{{ nrinfragent_logging | to_nice_yaml(indent=2) | indent(2, first=True) }}
 {% endif %}
