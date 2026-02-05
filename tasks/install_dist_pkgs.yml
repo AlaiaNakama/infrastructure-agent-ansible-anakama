@@ -59,20 +59,13 @@
   yum_repository:
     name: 'newrelic-infra'
     description: New Relic Infrastructure
-    baseurl: "https://download.newrelic.com/infrastructure_agent/linux/yum/el/{{ repo_version }}/{{ ansible_architecture }}"
+    baseurl: "https://download.newrelic.com/infrastructure_agent/linux/yum/el/{{ repo_version }}/$basearch"
     gpgcheck: yes
     repo_gpgcheck: "{{ (ansible_distribution == 'Amazon' and ansible_distribution_major_version | string == '2023') | ternary('no', 'yes') }}"
     gpgkey: https://download.newrelic.com/infrastructure_agent/keys/newrelic_rpm_key_current.gpg
     state: present
   vars:
-    repo_version: >-
-      {% if ansible_distribution == 'Amazon' and ansible_distribution_major_version == '2023' %}
-      8
-      {% elif ansible_service_mgr == 'upstart' %}
-      6
-      {% else %}
-      7
-      {% endif %}
+    repo_version: "{{ (ansible_distribution == 'Amazon' and ansible_distribution_major_version | string == '2023') | ternary('8', (ansible_service_mgr == 'upstart') | ternary('6', '7')) }}"
   when: ansible_distribution | lower == 'amazon' or nrinfragent_distribution == 'amazon'
   register: setup_agent_repo_amazon
 
