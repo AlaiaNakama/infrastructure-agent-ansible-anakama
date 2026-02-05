@@ -2,7 +2,7 @@
 - name: ensure python-yaml is installed
   package:
     name: python-yaml
-    state: "{{ nrinfragent_state }}"
+    state: "{{ (nrinfragent_state in ['absent', 'removed']) | ternary(nrinfragent_state, 'present') }}"
   when:
     - nrinfragent_state != "absent"
     - nrinfragent_os_name != 'windows'
@@ -11,7 +11,7 @@
 - name: ensure python3-yaml is installed
   package:
     name: python3-yaml
-    state: "{{ nrinfragent_state }}"
+    state: "{{ (nrinfragent_state in ['absent', 'removed']) | ternary(nrinfragent_state, 'present') }}"
   when:
     - nrinfragent_state != "absent"
     - nrinfragent_os_name != 'windows'
